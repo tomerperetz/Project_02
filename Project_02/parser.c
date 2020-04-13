@@ -97,6 +97,10 @@ void UpperToLowerCase(char *action_string) {
 	}
 }
 
+
+
+
+// Public Functions ---------------------------------------------------------------------->
 void InitializeCommand(command *input_command) {
 	input_command->file_path = NULL;
 	input_command->search_str = NULL;
@@ -112,8 +116,11 @@ void InitializeCommand(command *input_command) {
 
 }
 
-// Public Functions ---------------------------------------------------------------------->
+void PrintCommand(command input_command) {
+	if (input_command.search_str != NULL) {
 
+	}
+}
 
 // main Function ---------------------------------------------------------------------->
 int main() {
