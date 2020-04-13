@@ -115,13 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\errorHandler.c" />
-    <ClCompile Include="..\..\..\..\Desktop\linkedList.c" />
-    <ClCompile Include="..\..\..\..\Desktop\parser.c" />
+    <ClCompile Include="errorHandler.c" />
+    <ClCompile Include="linkedList.c" />
+    <ClCompile Include="parser.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Desktop\errorHandler.h" />
-    <ClInclude Include="..\..\..\..\Desktop\linkedList.h" />
+    <ClInclude Include="errorHandler.h" />
+    <ClInclude Include="linkedList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
