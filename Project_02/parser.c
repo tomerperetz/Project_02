@@ -1,31 +1,15 @@
 /*
 ====================================================================================================================
 Description:
-this lib is used for parsering and has the main() function.
+this lib is used for parsering functions.
 ====================================================================================================================
 */
 
 // Includes ---------------------------------------------------------------------->
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
-#include "linkedList.h"
 #include "errorHandler.h"
+#include "parser.h"
 
-// Defines ---------------------------------------------------------------------->
-#define MAX_LINE_LEN 100
-#define LONGEST_INT_SIZE 11
-#define ADD_END 1
-#define ADD_START 2
-#define ADD_AFTER 3
-#define INDEX 4
-#define DEL 5
-#define PRINT 6
-#define EXIT 7
-#define NO_ACTION 8
-#define ASCI_NUMBER_FOR_0 48
-#define ASCI_NUMBER_FOR_9 57
+
 
 // Private Functions ---------------------------------------------------------------------->
 char* FindNextWordBegining(char* string_ptr) {
@@ -113,7 +97,31 @@ void UpperToLowerCase(char *action_string) {
 	}
 }
 
+void InitializeCommand(command *input_command) {
+	input_command->file_path = NULL;
+	input_command->search_str = NULL;
+	input_command->enabled.A = FALSE;
+	input_command->enabled.A_num = FALSE;
+	input_command->enabled.b = FALSE;
+	input_command->enabled.c = FALSE;
+	input_command->enabled.E = FALSE;
+	input_command->enabled.i = FALSE;
+	input_command->enabled.n = FALSE;
+	input_command->enabled.v = FALSE;
+	input_command->enabled.x = FALSE;
+
+}
+
+// Public Functions ---------------------------------------------------------------------->
+
+
 // main Function ---------------------------------------------------------------------->
 int main() {
+	int argc = 3;
+	char argv[][20] = { "grep", "-n", "blabla","text.txt" };
+	command input_command;
+
+	InitializeCommand(&input_command);
+
 
 }

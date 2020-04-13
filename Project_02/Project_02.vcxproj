@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="errorHandler.h" />
     <ClInclude Include="linkedList.h" />
+    <ClInclude Include="parser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
