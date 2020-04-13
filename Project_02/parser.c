@@ -117,7 +117,7 @@ void InitializeCommand(command *input_command) {
 
 // main Function ---------------------------------------------------------------------->
 int main() {
-	int argc = 3;
+	int argc = 4;
 	char argv[][20] = { "grep", "-n", "blabla","text.txt" };
 	command input_command;
 
