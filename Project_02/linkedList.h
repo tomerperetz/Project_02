@@ -1,28 +1,28 @@
 #ifndef LINKED_LIS_H
 #define LINKED_LIST_H
+
+#include <stdbool.h>
+
 // Public Stractures --------------------------------------------------------------------->
 
 typedef struct _node
 {
-	int data;
+	char *line;
+	bool is_str_in_line;
+	int line_number;
+	int byte_number;
+	int line_length;
 	struct _node *prev;
 	struct _node *next;
 } node;
 
 // Public Functions ---------------------------------------------------------------------->
 
-node* insert_start(node *head, int data);
-
-node *insert_end(node *head, int data);
-
-int add_after_element(node *head, int element, int data);
-
-void printElementIdx(node *head, int element);
+node *insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number);
 
 void printList(node *head);
 
 node* freeList(node *head);
 
-node* del_idx(node *head, int idx, int *exit_flag);
 
 #endif

@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="errorHandler.c" />
     <ClCompile Include="linkedList.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="my_grep.c" />
     <ClCompile Include="parser.c" />
   </ItemGroup>
