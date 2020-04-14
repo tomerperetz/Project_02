@@ -1,15 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>  
+#include <string.h>
 #include "errorHandler.h"
 #include "linkedList.h"
 
 // Dummy Variables
 #define TEST_FILE_NAME "my_text.txt"
+#define NEEDLE "hump"
 
-
-bool is_line_match(const char *line)
+bool is_line_match(const char *heist, const char *needle)
 {
-	return true;
+	if (strstr(heist, needle) != NULL) return true;
+	return false;
 }
 
 int main()
@@ -34,7 +36,7 @@ int main()
 	while (line_size != EOF)
 	{
 		line_count++;
-		is_str_in_line = is_line_match(line_buffer);
+		is_str_in_line = is_line_match(line_buffer, NEEDLE);
 		head = insert_end(head, line_buffer, is_str_in_line, line_count);
 		line_size = getline(&line_buffer, &line_buffer_size, fp);
 	}
@@ -42,5 +44,6 @@ int main()
 	fclose(fp);
 	printList(head);
 	freeList(head);
+
 	return 0;
 }

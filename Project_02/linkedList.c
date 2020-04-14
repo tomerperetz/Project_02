@@ -31,7 +31,7 @@ node* init_node(const char* line, const bool is_str_in_line, const int line_numb
 	strcpy(new_node->line, line);
 	new_node->is_str_in_line = is_str_in_line;
 	new_node->line_number = line_number;
-	new_node->byte_number = line_len*sizeof(char);
+	new_node->byte_number = 0;
 	new_node->line_length = line_len;
 	new_node->prev = NULL;
 	new_node->next = NULL;
@@ -56,6 +56,10 @@ node* insert_end(node *head, const char* line, const bool is_str_in_line, const 
 
 	curr_node->next = new_node;
 	new_node->prev = curr_node;
+
+	// update number of bytes
+	new_node->byte_number = new_node->prev->line_length + new_node->prev->byte_number;
+	
 	return head;
 }
 
