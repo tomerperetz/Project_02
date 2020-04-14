@@ -65,7 +65,7 @@ char* insertStrToCommand(char *detination_str, char *argument) {
 		raiseError(ERR_MEM_ALLOC_ID, __FILE__, __func__, __LINE__, ERR_MEM_ALLOC_CONTENT);
 		return NULL;
 	}
-	strcpy_s(detination_str, str_size, argument);
+	strcpy(detination_str, argument);
 	return detination_str;
 
 }
