@@ -36,8 +36,8 @@ int main()
 	while (line_size != EOF)
 	{
 		line_count++;
-		is_str_in_line = is_line_match(line_buffer, NEEDLE);
-		head = insert_end(head, line_buffer, is_str_in_line, line_count);
+		is_str_in_line = isLineMatch(line_buffer, NEEDLE);
+		head = insertEnd(head, line_buffer, is_str_in_line, line_count);
 		line_size = getline(&line_buffer, &line_buffer_size, fp);
 	}
 

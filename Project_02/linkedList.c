@@ -43,7 +43,7 @@ node* initNode(const char* line, const bool is_str_in_line, const int line_numbe
 
 node* insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number)
 {
-	node *new_node = init_node(line, is_str_in_line, line_number);
+	node *new_node = initNode(line, is_str_in_line, line_number);
 	node *curr_node = head;
 
 	// if the list is currently empty
