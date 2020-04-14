@@ -16,23 +16,21 @@ this lib is used for handeling linked lists
 
 // Private Functions ---------------------------------------------------------------------->
 
-node* initNode(const char* line, const bool is_str_in_line, const int line_number)
+node* initNode(const char* line, const bool is_str_in_line, const int line_number, const int line_size)
 {
 	node *new_node = (node*)malloc(sizeof(node));
-	int line_len = 0;
 	if (new_node == NULL)
 	{
 		raiseError(ERR_MEM_ALLOC_ID, __FILE__, __func__, __LINE__, ERR_MEM_ALLOC_CONTENT);
 		return NULL;
 	}
 
-	line_len = strlen(line);
-	new_node->line = (char*)malloc(sizeof(char)*line_len);
+	new_node->line = (char*)malloc(sizeof(char)*line_size + 1);
 	strcpy(new_node->line, line);
 	new_node->is_str_in_line = is_str_in_line;
 	new_node->line_number = line_number;
 	new_node->byte_number = 0;
-	new_node->line_length = line_len;
+	new_node->line_length = line_size;
 	new_node->prev = NULL;
 	new_node->next = NULL;
 
@@ -41,9 +39,9 @@ node* initNode(const char* line, const bool is_str_in_line, const int line_numbe
 
 // Public Functions ---------------------------------------------------------------------->
 
-node* insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number)
+node* insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number, const int line_size)
 {
-	node *new_node = initNode(line, is_str_in_line, line_number);
+	node *new_node = initNode(line, is_str_in_line, line_number, line_size);
 	node *curr_node = head;
 
 	// if the list is currently empty

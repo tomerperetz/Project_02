@@ -51,7 +51,7 @@ void printCommand(command input_command);
 
 int commandParser(char **arguments_list, int arguments_amount, command *input_command);
 
-void freeAllMemorey(command *input_command);
+void freeCommand(command *input_command);
 
 
 #endif

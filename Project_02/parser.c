@@ -152,7 +152,7 @@ int commandParser(char **arguments_list, int arguments_amount, command *input_co
 	return true;
 }
 
-void freeAllMemorey(command *input_command) {
+void freeCommand(command *input_command) {
 	if (input_command->search_str != NULL) {
 		free((input_command->search_str));
 	}
