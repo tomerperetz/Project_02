@@ -26,6 +26,7 @@ node* init_node(int data)
 		return NULL;
 	}
 	new_node->data = data;
+	
 	new_node->next = NULL;
 	new_node->prev = NULL;
 

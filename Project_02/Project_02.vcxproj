@@ -119,8 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="errorHandler.c" />
-    <ClCompile Include="linkedList.c" />
-    <ClCompile Include="parser.c" />
+    <ClCompile Include="my_grep.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="errorHandler.h" />

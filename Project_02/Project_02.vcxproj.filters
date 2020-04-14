@@ -18,10 +18,7 @@
     <ClCompile Include="errorHandler.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="linkedList.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parser.c">
+    <ClCompile Include="my_grep.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
