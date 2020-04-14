@@ -8,7 +8,7 @@
 #define TEST_FILE_NAME "my_text.txt"
 #define NEEDLE "hump"
 
-bool is_line_match(const char *heist, const char *needle)
+bool isLineMatch(const char *heist, const char *needle)
 {
 	if (strstr(heist, needle) != NULL) return true;
 	return false;

@@ -18,7 +18,7 @@ typedef struct _node
 
 // Public Functions ---------------------------------------------------------------------->
 
-node *insert_end(node *head, const char* line, const bool is_str_in_line, const int line_number);
+node *insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number);
 
 void printList(node *head);
 

@@ -16,7 +16,7 @@ this lib is used for handeling linked lists
 
 // Private Functions ---------------------------------------------------------------------->
 
-node* init_node(const char* line, const bool is_str_in_line, const int line_number)
+node* initNode(const char* line, const bool is_str_in_line, const int line_number)
 {
 	node *new_node = (node*)malloc(sizeof(node));
 	int line_len = 0;
@@ -41,7 +41,7 @@ node* init_node(const char* line, const bool is_str_in_line, const int line_numb
 
 // Public Functions ---------------------------------------------------------------------->
 
-node* insert_end(node *head, const char* line, const bool is_str_in_line, const int line_number)
+node* insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number)
 {
 	node *new_node = init_node(line, is_str_in_line, line_number);
 	node *curr_node = head;
