@@ -39,7 +39,7 @@ int isListEmpty(node *head)
 	if (head == NULL)
 	{
 		raiseError(1, __FILE__, __func__, __LINE__, ERR_1_LINKED_LIST_ERR);
-		return TRUE;
+		return true;
 	}
 	return FALSE;
 }
@@ -130,7 +130,7 @@ int add_after_element(node *head, int element, int data)
 	if (temp_node != NULL)
 		temp_node->prev = new_node;
 
-	return TRUE;
+	return true;
 }
 
 void printElementIdx(node *head, int element) {

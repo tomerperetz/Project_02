@@ -1,6 +1,5 @@
 #ifndef PARSER_H
 #define PARSER_H
-// Includes Stractures --------------------------------------------------------------------->
 
 #include <stdio.h>
 #include <ctype.h>
@@ -8,8 +7,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
-// Defines ---------------------------------------------------------------------->
 #define MAX_LINE_LEN 100
 #define LONGEST_INT_SIZE 11
 #define ADD_END 1
@@ -22,8 +19,8 @@
 #define NO_ACTION 8
 #define ASCI_NUMBER_FOR_0 48
 #define ASCI_NUMBER_FOR_9 57
-
-// Public Stractures --------------------------------------------------------------------->
+#define SEARCH_STR 1
+#define FILE_PATH 2
 
 typedef struct _grep_options
 {
@@ -42,12 +39,19 @@ typedef struct _grep_options
 typedef struct _command
 {
 	char* search_str;
-	grep_options enabled;
 	char* file_path;
+	grep_options enabled;
+	bool std_in;
 } command;
 
-// Public Functions ---------------------------------------------------------------------->
 
+void initializeCommand(command *input_command);
+
+void printCommand(command input_command);
+
+int commandParser(char **arguments_list, int arguments_amount, command *input_command);
+
+void freeAllMemorey(command *input_command);
 
 
 #endif
