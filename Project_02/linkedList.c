@@ -22,7 +22,7 @@ node* init_node(int data)
 
 	if (new_node == NULL)
 	{
-		raiseError(2, __FILE__, __func__, __LINE__, ERR_2_MEM_ALLOC);
+		raiseError(ERR_MEM_ALLOC_ID, __FILE__, __func__, __LINE__, ERR_MEM_ALLOC_CONTENT);
 		return NULL;
 	}
 	new_node->data = data;
@@ -38,10 +38,10 @@ int isListEmpty(node *head)
 	// check if list is empty a given head node, if so - raise errors
 	if (head == NULL)
 	{
-		raiseError(1, __FILE__, __func__, __LINE__, ERR_1_LINKED_LIST_ERR);
+		raiseError(ERR_IO_ID, __FILE__, __func__, __LINE__, ERR_IO_CONTENT);
 		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 node* find_node_by_index(node *head, int idx)
@@ -68,7 +68,7 @@ node* find_node_by_data_ret_node(node *head, int element)
 		if (curr_node->data == element) return curr_node;
 		curr_node = curr_node->next;
 	}
-	raiseError(1, __FILE__, __func__, __LINE__, ERR_1_LINKED_LIST_ERR);
+	raiseError(ERR_IO_ID, __FILE__, __func__, __LINE__, ERR_IO_CONTENT);
 	return NULL;
 }
 

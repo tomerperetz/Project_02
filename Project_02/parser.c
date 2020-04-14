@@ -57,7 +57,7 @@ void checkGrepOption(char *argument, command* input_command, int *A_flag) {
 }
 
 char* insertStrToCommand(char *detination_str, char *argument) {
-	size_t str_size = 0;
+	size_t idx =0, str_size = 0;
 
 	str_size = strlen(argument) + 1;
 	detination_str = (char*)malloc(sizeof(char)*str_size);
@@ -65,15 +65,21 @@ char* insertStrToCommand(char *detination_str, char *argument) {
 		raiseError(ERR_MEM_ALLOC_ID, __FILE__, __func__, __LINE__, ERR_MEM_ALLOC_CONTENT);
 		return NULL;
 	}
-	strcpy_s(detination_str, str_size, argument);
+	//strcpy(detination_str, argument);
+	for (idx = 0; idx < str_size; idx++) {
+		detination_str[idx] = argument[idx];
+		if (detination_str[idx] == '\n') {
+			detination_str[idx] = '\0';
+		}
+	}
 	return detination_str;
 
 }
 
 // Public Functions ---------------------------------------------------------------------->
 void initializeCommand(command *input_command) {
-	input_command->file_path;
-	input_command->search_str;
+	input_command->search_str = NULL;
+	input_command->file_path = NULL;
 	input_command->enabled.A = false;
 	input_command->enabled.A_num = false;
 	input_command->enabled.b = false;
@@ -94,10 +100,7 @@ void printCommand(command input_command) {
 	else {
 		printf("Search string is:            %s\n", input_command.search_str);
 	}
-	if (input_command.file_path == NULL) {
-		printf("File path is:                NULL\n");
-	}
-	else {
+	if (input_command.std_in == false) {
 		printf("File path is:                %s\n", input_command.file_path);
 	}
 	printf("Grep option A: %d   with num: %d\n", input_command.enabled.A, input_command.enabled.A_num);
@@ -112,10 +115,10 @@ void printCommand(command input_command) {
 }
 
 int commandParser(char **arguments_list, int arguments_amount, command *input_command) {
-	int idx = 2, parsin_flag = 0, A_flag = false, search_str_flag = false, file_path_flag = false;
+	int idx = 2, A_flag = false, search_str_flag = false, file_path_flag = false;
 
 
-	for (idx = 2; idx < arguments_amount; idx++) {
+	for (idx = 1; idx < arguments_amount; idx++) {
 		if (A_flag == true) {
 			input_command->enabled.A_num = atoi(arguments_list[idx]);
 			A_flag = false;
@@ -143,7 +146,7 @@ int commandParser(char **arguments_list, int arguments_amount, command *input_co
 			}
 		}
 	}
-	if (file_path_flag = false) {          // check if there is a better way to do it. 
+	if (file_path_flag == false) {          // check if there is a better way to do it. 
 		input_command->std_in = true;
 	}
 	return true;
