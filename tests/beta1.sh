@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
-~nimrodav/grep_tests/test_permissions.sh
-~nimrodav/grep_tests/check_line_lengths.sh
-~nimrodav/grep_tests/run1.sh
-~nimrodav/grep_tests/run2.sh
-~nimrodav/grep_tests/run3.sh
-~nimrodav/grep_tests/run4.sh
+# ../tests/test_permissions.sh
+#../tests/check_line_lengths.sh
+../tests/tomer/run1.sh
+../tests/tomer/run2.sh
+../tests/tomer/run3.sh
+../tests/tomer/run4.sh
