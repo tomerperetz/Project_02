@@ -16,7 +16,7 @@ this lib is used for handeling linked lists
 
 // Private Functions ---------------------------------------------------------------------->
 
-node* initNode(const char* line, const bool is_str_in_line, const int line_number, const int line_size)
+node* initNode(const char* line, const int line_number, const int line_size)
 {
 	node *new_node = (node*)malloc(sizeof(node));
 	if (new_node == NULL)
@@ -27,7 +27,7 @@ node* initNode(const char* line, const bool is_str_in_line, const int line_numbe
 
 	new_node->line = (char*)malloc(sizeof(char)*line_size + 1);
 	strcpy(new_node->line, line);
-	new_node->is_str_in_line = is_str_in_line;
+	new_node->match = false;
 	new_node->line_number = line_number;
 	new_node->byte_number = 0;
 	new_node->line_length = line_size;
@@ -39,9 +39,9 @@ node* initNode(const char* line, const bool is_str_in_line, const int line_numbe
 
 // Public Functions ---------------------------------------------------------------------->
 
-node* insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number, const int line_size)
+node* insertEnd(node *head, const char* line, const int line_number, const int line_size)
 {
-	node *new_node = initNode(line, is_str_in_line, line_number, line_size);
+	node *new_node = initNode(line, line_number, line_size);
 	node *curr_node = head;
 
 	// if the list is currently empty
@@ -75,7 +75,7 @@ void printList(node *head)
 			printf("line: %s", curr_node->line);
 			printf("line length in chars: %d\n", curr_node->line_length);
 			printf("line length bytes: %d\n", curr_node->byte_number);
-			printf("str in line: %d\n", curr_node->is_str_in_line);
+			printf("str in line: %d\n", curr_node->match);
 			curr_node = curr_node->next;
 		}
 	}

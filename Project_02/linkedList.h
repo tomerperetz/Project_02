@@ -8,7 +8,7 @@
 typedef struct _node
 {
 	char *line;
-	bool is_str_in_line;
+	bool match;
 	int line_number;
 	int byte_number;
 	int line_length;
@@ -18,7 +18,7 @@ typedef struct _node
 
 // Public Functions ---------------------------------------------------------------------->
 
-node *insertEnd(node *head, const char* line, const bool is_str_in_line, const int line_number, const int line_size);
+node* insertEnd(node *head, const char* line, const int line_number, const int line_size);
 
 void printList(node *head);
 

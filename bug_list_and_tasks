@@ -1,0 +1,4 @@
+1. argc proetction - check minimal required values
+2. change struct enables names to meaningful names DONE
+3. change search_str to substring or dest_str
+4. discard \n when reading line

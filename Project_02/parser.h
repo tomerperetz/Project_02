@@ -24,15 +24,15 @@
 
 typedef struct _grep_options
 {
-	bool A;
-	int A_num;
-	bool b;
-	bool c;
-	bool i;
-	bool n;
-	bool v;
-	bool x;
-	bool E;
+	bool print_extra_lines;
+	int num_of_extra_lines;
+	bool print_bytes;
+	bool print_count_only;
+	bool match_case;
+	bool print_line_number;
+	bool invert_match;
+	bool wrap_around;
+	bool extended_regexp;
 
 } grep_options;
 

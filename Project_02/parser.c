@@ -23,34 +23,34 @@ void upperToLowerCase(char *action_string) {
 void checkGrepOption(char *argument, command* input_command, int *A_flag) {
 	switch (argument[1]) {
 	case 'A':
-		input_command->enabled.A = true;
+		input_command->enabled.print_extra_lines = true;
 		if (argument[2] != '\0') {
-			input_command->enabled.A_num = atoi(argument + 2);
+			input_command->enabled.num_of_extra_lines = atoi(argument + 2);
 		}
 		else {
 			*A_flag = true;
 		}
 		break;
 	case 'b':
-		input_command->enabled.b = true;
+		input_command->enabled.print_bytes = true;
 		break;
 	case 'c':
-		input_command->enabled.c = true;
+		input_command->enabled.print_count_only = true;
 		break;
 	case 'E':
-		input_command->enabled.E = true;
+		input_command->enabled.extended_regexp = true;
 		break;
 	case 'i':
-		input_command->enabled.i = true;
+		input_command->enabled.match_case = false;
 		break;
 	case 'n':
-		input_command->enabled.n = true;
+		input_command->enabled.print_line_number = true;
 		break;
 	case 'v':
-		input_command->enabled.v = true;
+		input_command->enabled.invert_match = true;
 		break;
 	case 'x':
-		input_command->enabled.x = true;
+		input_command->enabled.wrap_around = false;
 		break;
 	}
 
@@ -80,15 +80,15 @@ char* insertStrToCommand(char *detination_str, char *argument) {
 void initializeCommand(command *input_command) {
 	input_command->search_str = NULL;
 	input_command->file_path = NULL;
-	input_command->enabled.A = false;
-	input_command->enabled.A_num = false;
-	input_command->enabled.b = false;
-	input_command->enabled.c = false;
-	input_command->enabled.E = false;
-	input_command->enabled.i = false;
-	input_command->enabled.n = false;
-	input_command->enabled.v = false;
-	input_command->enabled.x = false;
+	input_command->enabled.print_extra_lines = false;
+	input_command->enabled.num_of_extra_lines = false;
+	input_command->enabled.print_bytes = false;
+	input_command->enabled.print_count_only = false;
+	input_command->enabled.extended_regexp = false;
+	input_command->enabled.match_case = true;
+	input_command->enabled.print_line_number = false;
+	input_command->enabled.invert_match = false;
+	input_command->enabled.wrap_around = true;
 	input_command->std_in = false;
 
 }
@@ -103,15 +103,15 @@ void printCommand(command input_command) {
 	if (input_command.std_in == false) {
 		printf("File path is:                %s\n", input_command.file_path);
 	}
-	printf("Grep option A: %d   with num: %d\n", input_command.enabled.A, input_command.enabled.A_num);
-	printf("Grep option b:               %d\n", input_command.enabled.b);
-	printf("Grep option c:               %d\n", input_command.enabled.c);
-	printf("Grep option E:               %d\n", input_command.enabled.E);
-	printf("Grep option i:               %d\n", input_command.enabled.i);
-	printf("Grep option n:               %d\n", input_command.enabled.n);
-	printf("Grep option v:               %d\n", input_command.enabled.v);
-	printf("Grep option x:               %d\n", input_command.enabled.x);
-	printf("Input through stdin:         %d\n", input_command.std_in);
+	printf("Grep option print_extra_lines:			%d   with num: %d\n", input_command.enabled.print_extra_lines, input_command.enabled.num_of_extra_lines);
+	printf("Grep option print_bytes:                %d\n", input_command.enabled.print_bytes);
+	printf("Grep option print_count_only:           %d\n", input_command.enabled.print_count_only);
+	printf("Grep option extended_regexp:            %d\n", input_command.enabled.extended_regexp);
+	printf("Grep option match_case:					%d\n", input_command.enabled.match_case);
+	printf("Grep option print_line_number:          %d\n", input_command.enabled.print_line_number);
+	printf("Grep option invert_match:               %d\n", input_command.enabled.invert_match);
+	printf("Grep option wrap_around:                %d\n", input_command.enabled.wrap_around);
+	printf("Input through stdin:					%d\n", input_command.std_in);
 }
 
 int commandParser(char **arguments_list, int arguments_amount, command *input_command) {
@@ -120,7 +120,7 @@ int commandParser(char **arguments_list, int arguments_amount, command *input_co
 
 	for (idx = 1; idx < arguments_amount; idx++) {
 		if (A_flag == true) {
-			input_command->enabled.A_num = atoi(arguments_list[idx]);
+			input_command->enabled.num_of_extra_lines = atoi(arguments_list[idx]);
 			A_flag = false;
 			continue;
 		}
