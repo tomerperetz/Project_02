@@ -1,27 +1,28 @@
+CFLAGS=-01 -g
+
 .PHONY: all clean test
 
 all: my_grep 
 
 clean:
-	-rm *.o my_grep
+	rm -rf *.o my_grep
 
 test: my_grep
 	./run_test.sh
 
-my_grep: my_grep.o errorHandler.o linkedList.o parser.o
-	gcc -o my_grep my_grep.o errorHandler.o linkedList.o parser.o 
+my_grep: errorHandler.o linkedList.o parser.o my_grep.o
+	gcc -g my_grep.o errorHandler.o linkedList.o parser.o -o my_grep -O0
 
-my_grep.o: my_grep.c errorHandler.h parser.h
-	gcc -c -Wall -Wextra my_grep.c
+my_grep.o: my_grep.c errorHandler.h parser.h linkedList.h
+	gcc -c my_grep.c -g
 	
 errorHandler.o: errorHandler.c errorHandler.h
-	gcc -c -Wall -Wextra errorHandler.c
+	gcc -c errorHandler.c -g
 
 linkedList.o: linkedList.c linkedList.h errorHandler.h
-	gcc -c -Wall -Wextra linkedList.c
+	gcc -c linkedList.c -g
 
 parser.o: parser.c parser.h errorHandler.h
-	gcc -c -Wall -Wextra parser.c
-
-
+	gcc -c parser.c -g
 	
+

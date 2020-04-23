@@ -20,6 +20,9 @@ void upperToLowerCase(char *action_string) {
 	}
 }
 
+
+
+
 void checkGrepOption(char *argument, command* input_command, int *A_flag) {
 	switch (argument[1]) {
 	case 'A':
@@ -103,7 +106,8 @@ void printCommand(command input_command) {
 	if (input_command.std_in == false) {
 		printf("File path is:                %s\n", input_command.file_path);
 	}
-	printf("Grep option print_extra_lines:			%d   with num: %d\n", input_command.enabled.print_extra_lines, input_command.enabled.num_of_extra_lines);
+	printf("Grep option print_extra_lines:%d   with num: %d\n", input_command.enabled.print_extra_lines,
+ input_command.enabled.num_of_extra_lines);
 	printf("Grep option print_bytes:                %d\n", input_command.enabled.print_bytes);
 	printf("Grep option print_count_only:           %d\n", input_command.enabled.print_count_only);
 	printf("Grep option extended_regexp:            %d\n", input_command.enabled.extended_regexp);

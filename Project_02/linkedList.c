@@ -27,6 +27,8 @@ node* initNode(const char* line, const int line_number, const int line_size)
 
 	new_node->line = (char*)malloc(sizeof(char)*line_size + 1);
 	strcpy(new_node->line, line);
+	if(new_node->line[line_size-1] == '\n')
+		new_node->line[line_size-1] = '\0';
 	new_node->match = false;
 	new_node->line_number = line_number;
 	new_node->byte_number = 0;
@@ -72,7 +74,7 @@ void printList(node *head)
 		while (curr_node != NULL)
 		{
 			printf("line number: %d\n", curr_node->line_number);
-			printf("line: %s", curr_node->line);
+			printf("line: %s\n", curr_node->line);
 			printf("line length in chars: %d\n", curr_node->line_length);
 			printf("line length bytes: %d\n", curr_node->byte_number);
 			printf("str in line: %d\n", curr_node->match);

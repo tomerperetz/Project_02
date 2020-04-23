@@ -13,13 +13,14 @@
 
 void lowerCase(char *str)
 {
+	int i = 0;
 	/*
 	Description: recieve char array in any form (lower/higher/mixed case) and convert all to lower case
 	parameters:
 			 - char *str
 	Returns: void, convert arr itself
 	*/
-	for (int i = 0; str[i] != '\0'; i++)
+	for (i = 0; str[i] != '\0'; i++)
 		str[i] = tolower(str[i]);
 }
 
@@ -31,7 +32,7 @@ void printOutput(node *head, const command *usr_cmd)
 	while (curr_node != NULL)
 	{
 		if (curr_node->match)
-			printf("%s", curr_node->line);
+			printf("%s\n", curr_node->line);
 
 		curr_node = curr_node->next;
 	}
@@ -44,14 +45,14 @@ void searchNeedle(node *head, const command *usr_cmd)
 	bool wrap_around = usr_cmd->enabled.wrap_around;
 	bool invert_match = usr_cmd->enabled.invert_match;
 	bool res = false;
-	char *needle = (char*)malloc(strlen(usr_cmd->search_str+1)*sizeof(char));
+	char *needle = (char*)malloc((strlen(usr_cmd->search_str)+1)*sizeof(char));
 	char *haist = NULL;
 	
 	strcpy(needle, usr_cmd->search_str);
 
 	while (curr_node != NULL)
 	{
-		haist = (char*)malloc(strlen(curr_node->line) * sizeof(char)+1);
+		haist = (char*)malloc((strlen(curr_node->line)+1) * sizeof(char));
 		strcpy(haist, curr_node->line);
 
 		if (!match_case)
@@ -78,14 +79,12 @@ void searchNeedle(node *head, const command *usr_cmd)
 	free(needle);
 }
 
-
 void my_grep(const command *usr_cmd, node *head)
 {
+	if(head == NULL) return;
 	searchNeedle(head, usr_cmd);
 	printOutput(head, usr_cmd);
 }
-
-
 
 int main(int argc, char *argv[])
 {
@@ -95,7 +94,7 @@ int main(int argc, char *argv[])
 	size_t line_size;
 	int line_count = 0;
 	command usr_cmd;
-	FILE *fp;
+	FILE *fp = NULL;
 	int ret_val = EXIT_SUCCESS;
 
 	initializeCommand(&usr_cmd);
@@ -115,21 +114,22 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	
 	line_size = getline(&line_buffer, &line_buffer_size, fp);
-	
 	while ((int)line_size != EOF)
 	{
 
 		line_count++; // line counter starts from 1 - like real grep
 		head = insertEnd(head, line_buffer, line_count, line_size);
+		free(line_buffer);
+		line_buffer = NULL;
 		line_size = getline(&line_buffer, &line_buffer_size, fp);
 	}
-
-	my_grep(&usr_cmd, head);
-	fclose(fp);
+	
 	free(line_buffer);
+	fclose(fp);
+	my_grep(&usr_cmd, head);
 	freeList(head);
+	goto free_mem_and_exit;
 
 free_mem_and_exit:
 	freeCommand(&usr_cmd);
