@@ -5,6 +5,8 @@
 #include "linkedList.h"
 #include "parser.h"
 
+#define END -1
+
 //void parseDestStr(const char *str)
 //{
 //	printf("Parsing User str");
@@ -24,16 +26,72 @@ void lowerCase(char *str)
 		str[i] = tolower(str[i]);
 }
 
-void printOutput(node *head, const command *usr_cmd)
-{
+int rowCount(node *head) {
 	node *curr_node = head;
-	//bool print_count_only = usr_cmd->enabled.print_count_only;
+	int counter = 0;
 
 	while (curr_node != NULL)
 	{
 		if (curr_node->match)
-			printf("%s\n", curr_node->line);
+			counter++;
+		curr_node = curr_node->next;
+	}
+	return counter;
+}
 
+void printNode(node *curr_node, const command *usr_cmd, const char sign) {
+		
+	if (usr_cmd->enabled.print_line_number) {
+		printf("%d%c", curr_node->line_number, sign);
+	}
+	if (usr_cmd->enabled.print_bytes) {
+		printf("%d%c", curr_node->byte_number, sign);
+	}
+	printf("%s\n", curr_node->line);
+}
+
+int printANode(node *curr_node, const command *usr_cmd , int rows_left_to_print) {
+	int rows = rows_left_to_print;
+
+	if (curr_node->match) {
+		rows = usr_cmd->enabled.num_of_extra_lines;
+		printNode(curr_node, usr_cmd, ':');
+		if (curr_node->next == NULL) return END;
+		if (rows == 0 && !curr_node->next->match)
+			printf("--\n");
+	}
+	else {
+		if (rows != 0) {
+			printNode(curr_node, usr_cmd, '-');
+			rows--;
+			if (curr_node->next == NULL) return END;
+			if (rows == 0 && !curr_node->next->match)
+				printf("--\n");
+		}
+	}
+	return rows;
+}
+
+void printOutput(node *head, const command *usr_cmd)
+{
+	node *curr_node = head;
+	int rows_amount = usr_cmd->enabled.num_of_extra_lines;
+	int rows_left_to_print = 0;
+	bool print_count_only = usr_cmd->enabled.print_count_only;
+
+	if (print_count_only) {
+		printf("%d\n", rowCount(curr_node));
+		return;
+	}
+
+	while (curr_node != NULL)
+	{
+		if (usr_cmd->enabled.print_extra_lines) {
+			rows_left_to_print = printANode(curr_node, usr_cmd, rows_left_to_print);
+		}
+		else if (curr_node->match){
+				printNode(curr_node, usr_cmd, ':');
+		}
 		curr_node = curr_node->next;
 	}
 }
@@ -41,26 +99,36 @@ void printOutput(node *head, const command *usr_cmd)
 void searchNeedle(node *head, const command *usr_cmd)
 {
 	node *curr_node = head;
+	bool print_count_only = usr_cmd->enabled.print_count_only;
 	bool match_case = usr_cmd->enabled.match_case;
 	bool wrap_around = usr_cmd->enabled.wrap_around;
 	bool invert_match = usr_cmd->enabled.invert_match;
 	bool res = false;
 	char *needle = (char*)malloc((strlen(usr_cmd->search_str)+1)*sizeof(char));
-	char *haist = NULL;
+	char *haystack = NULL;
 	
 	strcpy(needle, usr_cmd->search_str);
 
 	while (curr_node != NULL)
 	{
-		haist = (char*)malloc((strlen(curr_node->line)+1) * sizeof(char));
-		strcpy(haist, curr_node->line);
+		haystack = (char*)malloc((strlen(curr_node->line)+1) * sizeof(char));
+		strcpy(haystack, curr_node->line);
 
-		if (!match_case)
-			lowerCase(haist);
+		if (!match_case) {
+			lowerCase(haystack);
+			lowerCase(needle);
+		}
 
 		if (wrap_around)
 		{ 
-			if (strstr(haist, needle) != NULL)
+			if (strstr(haystack, needle) != NULL)
+				res = true;
+			else
+				res = false;
+			
+		}
+		else {
+			if (strcmp(haystack, needle) == 0)
 				res = true;
 			else
 				res = false;
@@ -70,11 +138,10 @@ void searchNeedle(node *head, const command *usr_cmd)
 		{
 			res = !res;
 		}
-
 		curr_node->match = res;
 		curr_node = curr_node->next;
-		free(haist);
-		haist = NULL;
+		free(haystack);
+		haystack = NULL;
 	}
 	free(needle);
 }

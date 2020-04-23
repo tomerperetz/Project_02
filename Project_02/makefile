@@ -7,8 +7,8 @@ all: my_grep
 clean:
 	rm -rf *.o my_grep
 
-test: my_grep
-	./run_test.sh
+test:
+	sh run_tomer_tests.sh
 
 my_grep: errorHandler.o linkedList.o parser.o my_grep.o
 	gcc -g my_grep.o errorHandler.o linkedList.o parser.o -o my_grep -O0
