@@ -20,9 +20,6 @@ void upperToLowerCase(char *action_string) {
 	}
 }
 
-
-
-
 void checkGrepOption(char *argument, command* input_command, int *A_flag) {
 	switch (argument[1]) {
 	case 'A':
@@ -59,26 +56,44 @@ void checkGrepOption(char *argument, command* input_command, int *A_flag) {
 
 }
 
-char* insertStrToCommand(char *detination_str, char *argument) {
-	size_t idx =0, str_size = 0;
+char* insertStrToCommand(char *destination_str, const char *argument, bool regular_expression) {
+	size_t str_size = 0;
+	bool back_slash_flag = false, in_string = true;
+	int dest_idx = 0, arg_idx = 0;
 
 	str_size = strlen(argument) + 1;
-	detination_str = (char*)malloc(sizeof(char)*str_size);
-	if (detination_str == NULL) {
+	destination_str = (char*)malloc(sizeof(char)*str_size);
+	if (destination_str == NULL) {
 		raiseError(ERR_MEM_ALLOC_ID, __FILE__, __func__, __LINE__, ERR_MEM_ALLOC_CONTENT);
 		return NULL;
 	}
-	//strcpy(detination_str, argument);
-	for (idx = 0; idx < str_size; idx++) {
-		detination_str[idx] = argument[idx];
-		if (detination_str[idx] == '\n') {
-			detination_str[idx] = '\0';
+
+	while (in_string) {
+		if (regular_expression) {
+			if (back_slash_flag) {
+				destination_str[dest_idx] = argument[arg_idx];
+				back_slash_flag = false;
+				arg_idx++;
+				dest_idx++;
+				continue;
+			}
+			if (argument[arg_idx] == '\\') {
+				back_slash_flag = true;
+				arg_idx++;
+				continue;
+			}
 		}
+		destination_str[dest_idx] = argument[arg_idx];
+		if (destination_str[dest_idx] == '\n') {
+			destination_str[dest_idx] = '\0';
+		}
+		if (destination_str[dest_idx] == '\0') in_string = false;
+		arg_idx++;
+		dest_idx++;
 	}
-	return detination_str;
+	return destination_str;
 
 }
-
 // Public Functions ---------------------------------------------------------------------->
 void initializeCommand(command *input_command) {
 	input_command->search_str = NULL;
@@ -118,31 +133,31 @@ void printCommand(command input_command) {
 	printf("Input through stdin:					%d\n", input_command.std_in);
 }
 
-int commandParser(char **arguments_list, int arguments_amount, command *input_command) {
+int commandParser(char **arguments_list, int arguments_amount, command *usr_cmd) {
 	int idx = 2, A_flag = false, search_str_flag = false, file_path_flag = false;
 
 
 	for (idx = 1; idx < arguments_amount; idx++) {
 		if (A_flag == true) {
-			input_command->enabled.num_of_extra_lines = atoi(arguments_list[idx]);
+			usr_cmd->enabled.num_of_extra_lines = atoi(arguments_list[idx]);
 			A_flag = false;
 			continue;
 		}
 		if (arguments_list[idx][0] == '-') {
-			checkGrepOption(arguments_list[idx], input_command, &A_flag);
+			checkGrepOption(arguments_list[idx], usr_cmd, &A_flag);
 		}
 		else {
 			if (search_str_flag == false) {
-				input_command->search_str = insertStrToCommand(input_command->search_str, arguments_list[idx]);
-				if (input_command->search_str == NULL) {
+				usr_cmd->search_str = insertStrToCommand(usr_cmd->search_str, arguments_list[idx], usr_cmd->enabled.extended_regexp);
+				if (usr_cmd->search_str == NULL) {
 					return false;
 				}
 				search_str_flag = true;
 				continue;
 			}
 			else {
-				input_command->file_path = insertStrToCommand(input_command->file_path, arguments_list[idx]);
-				if (input_command->file_path == NULL) {
+				usr_cmd->file_path = insertStrToCommand(usr_cmd->file_path, arguments_list[idx], usr_cmd->enabled.extended_regexp);
+				if (usr_cmd->file_path == NULL) {
 					return false;
 				}
 				file_path_flag = true;
@@ -151,7 +166,7 @@ int commandParser(char **arguments_list, int arguments_amount, command *input_co
 		}
 	}
 	if (file_path_flag == false) {          // check if there is a better way to do it. 
-		input_command->std_in = true;
+		usr_cmd->std_in = true;
 	}
 	return true;
 }
