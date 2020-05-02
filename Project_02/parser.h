@@ -22,6 +22,12 @@
 #define SEARCH_STR 1
 #define FILE_PATH 2
 
+#define SIMPLE_CHAR 1
+#define DOT 2
+#define SQUARE_BRACKET 3
+#define ROUND_BRACKET 4
+
+
 typedef struct _grep_options
 {
 	bool print_extra_lines;
@@ -44,6 +50,34 @@ typedef struct _command
 	bool std_in;
 } command;
 
+typedef struct _square_brackets
+{
+	char start;
+	char end;
+
+} square_brackets;
+
+typedef struct _round_brackets
+{
+	char* str1;
+	char* str2;
+} round_brackets;
+
+typedef union _regex_char_data
+{
+	char simple_char;
+	bool dot;
+	square_brackets square_brackets;
+	round_brackets round_brackets;
+} regex_char_data;
+
+typedef struct _regex_char
+{
+	union _regex_char_data data;
+	int regex_char_type;
+} regex_char;
+
+void test_regex_parser();
 
 void initializeCommand(command *input_command);
 
