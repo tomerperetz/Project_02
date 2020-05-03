@@ -77,6 +77,12 @@ typedef struct _regex_char
 	int regex_char_type;
 } regex_char;
 
+void print_regex(regex_char **regex_char_arr);
+
+void freeRegex(regex_char **regex_char_arr);
+
+regex_char** regexParser(char* str_in);
+
 void test_regex_parser();
 
 void initializeCommand(command *input_command);

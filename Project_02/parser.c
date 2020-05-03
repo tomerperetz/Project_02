@@ -13,14 +13,24 @@ this lib is used for parsering functions.
 // Private Functions ---------------------------------------------------------------------->
 
 
-void print_regex(regex_char **regex_char_arr, int size)
+int getRegexLen(regex_char **regex_char_arr)
+{
+	int i = 0;
+	while (regex_char_arr[i] != NULL) i++;
+	return i;
+}
+void print_regex(regex_char **regex_char_arr)
 {
 	int i;
 	char start;
 	char end;
-
+	int size = getRegexLen(regex_char_arr);
 	for (i = 0; i < size; i++)
 	{
+		if (regex_char_arr[i] == NULL)
+		{
+			break;
+		}
 		if (regex_char_arr[i]->regex_char_type == SIMPLE_CHAR)
 			printf("%c", regex_char_arr[i]->data.simple_char);
 
@@ -44,7 +54,7 @@ void print_regex(regex_char **regex_char_arr, int size)
 			printf("first option: %s\n", regex_char_arr[i]->data.round_brackets.str1);
 			printf("second option: %s\n", regex_char_arr[i]->data.round_brackets.str2);
 		}
-
+		
 	}
 	printf("\n");
 }
@@ -128,139 +138,6 @@ int parseSquareBreckets(char* str_in, int curr_idx, int size, regex_char *regex_
 		raiseError(ERR_ILLEGAL_STRING_ID, __FILE__, __func__, __LINE__, ERR_ILLEGAL_STRING__CONTENT);
 		return ERR;
 	}
-}
-
-regex_char** regexParser(char* str_in)
-{
-	int i = 0;
-	size_t size = strlen(str_in) + 1;
-	
-	// allocate memory for regex
-	regex_char **regex_char_arr = (regex_char**)malloc(sizeof(regex_char*)*size);
-
-	for (i = 0; i < (int)size; i++)
-	{
-		regex_char_arr[i] = (regex_char*)malloc(sizeof(regex_char));
-	}
-
-	// parse str in
-	for (i = 0; i < size; i++)
-	{
-		switch (str_in[i])
-		{
-			case ('\\'):
-			{
-				regex_char_arr[i]->data.simple_char = str_in[i + 1];
-				regex_char_arr[i]->regex_char_type = SIMPLE_CHAR;
-				i++;
-				break;
-			}
-
-			case ('.'):
-			{
-				regex_char_arr[i]->data.dot = true;
-				regex_char_arr[i]->regex_char_type = DOT;
-				break;
-			}
-
-			case ('['):
-			{
-				regex_char_arr[i]->regex_char_type = SQUARE_BRACKET;
-				i = parseSquareBreckets(str_in, i, size, regex_char_arr[i]);
-				if (i == ERR)
-					return NULL;
-				break;
-			}
-
-			case ('('):
-			{
-				regex_char_arr[i]->regex_char_type = ROUND_BRACKET;
-				i = parseRoundBreckets(str_in, i, size, regex_char_arr[i]);
-				if (i == ERR)
-					return NULL;
-				break;
-			}
-
-			default:
-			{
-				regex_char_arr[i]->data.simple_char = str_in[i];
-				regex_char_arr[i]->regex_char_type = SIMPLE_CHAR;
-				break;
-			}
-		}
-
-		/*
-		if (str_in[i] == '\\')
-		{
-			regex_char_arr[i]->data.simple_char = str_in[i+1];
-			regex_char_arr[i]->regex_char_type = SIMPLE_CHAR;
-			i++;
-		}
-
-		else if (str_in[i] == '.')
-		{
-			regex_char_arr[i]->data.dot = true;
-			regex_char_arr[i]->regex_char_type = DOT;
-		}
-			
-		else if (str_in[i] == '[')
-		{
-			regex_char_arr[i]->regex_char_type = SQUARE_BRACKET;
-			i = parseSquareBreckets(str_in, i, size, regex_char_arr[i]);
-			if (i == ERR)
-				return ERR;
-		}
-
-		else if (str_in[i] == '(')
-		{
-			regex_char_arr[i]->regex_char_type = ROUND_BRACKET;
-			i = parseRoundBreckets(str_in, i, size, regex_char_arr[i]);
-			if (i == ERR)
-				return ERR;
-		}
-
-		else
-		{
-			regex_char_arr[i]->data.simple_char = str_in[i];
-			regex_char_arr[i]->regex_char_type = SIMPLE_CHAR;
-		}
-		*/
-	}
-	return regex_char_arr;
-}
-
-void freeRegex(regex_char **regex_char_arr, int size)
-{
-	int i = 0;
-
-	for (i = 0; i < size; i++)
-	{
-		if (regex_char_arr[i]->regex_char_type == ROUND_BRACKET)
-		{
-			free(regex_char_arr[i]->data.round_brackets.str1);
-			free(regex_char_arr[i]->data.round_brackets.str2);
-		}
-		free(regex_char_arr[i]);
-	}
-
-	free(regex_char_arr);
-}
-
-void test_regex_parser()
-{
-	int i = 0;
-	size_t str_len = 0;
-	char* str_test[100];
-	int ret_val = true;
-	regex_char **regex_char_arr = NULL;
-	scanf("%s", &str_test);
-	str_len = strlen(str_test) + 1;
-	regex_char_arr = regexParser(str_test);
-	if (ret_val == NULL) goto free_mem;
-	print_regex(regex_char_arr, str_len);
-	
-free_mem:
-	freeRegex(regex_char_arr, str_len);
 }
 
 void upperToLowerCase(char *action_string) {
@@ -347,6 +224,106 @@ char* insertStrToCommand(char *destination_str, const char *argument, bool regul
 }
 
 // Public Functions ---------------------------------------------------------------------->
+void freeRegex(regex_char **regex_char_arr)
+{
+	int i = 0;
+	int size = getRegexLen(regex_char_arr);
+	for (i = 0; i < size; i++)
+	{
+		if (regex_char_arr[i] == NULL)
+			break;
+		if (regex_char_arr[i]->regex_char_type == ROUND_BRACKET)
+		{
+			free(regex_char_arr[i]->data.round_brackets.str1);
+			free(regex_char_arr[i]->data.round_brackets.str2);
+		}
+		free(regex_char_arr[i]);
+	}
+
+	free(regex_char_arr);
+}
+
+regex_char** regexParser(char* str_in)
+{
+	int i = 0;
+	int j = 0;
+	size_t size = strlen(str_in);
+
+	// allocate memory for regex
+	regex_char **regex_char_arr = (regex_char**)malloc(sizeof(regex_char*)*(size+1));
+
+	for (i = 0; i < (int)size; i++)
+	{
+		regex_char_arr[i] = (regex_char*)malloc(sizeof(regex_char));
+	}
+
+	// parse str in
+	for (i = 0, j=0; i < size; i++, j++)
+	{
+		switch (str_in[i])
+		{
+			case ('\\'):
+			{
+				regex_char_arr[j]->data.simple_char = str_in[i + 1];
+				regex_char_arr[j]->regex_char_type = SIMPLE_CHAR;
+				i++;
+				break;
+			}
+
+			case ('.'):
+			{
+				regex_char_arr[j]->data.dot = true;
+				regex_char_arr[j]->regex_char_type = DOT;
+				break;
+			}
+
+			case ('['):
+			{
+				regex_char_arr[j]->regex_char_type = SQUARE_BRACKET;
+				i = parseSquareBreckets(str_in, i, size, regex_char_arr[j]);
+				if (i == ERR)
+					return NULL;
+				break;
+			}
+
+			case ('('):
+			{
+				regex_char_arr[j]->regex_char_type = ROUND_BRACKET;
+				i = parseRoundBreckets(str_in, i, size, regex_char_arr[j]);
+				if (i == ERR)
+					return NULL;
+				break;
+			}
+
+			default:
+			{
+				regex_char_arr[j]->data.simple_char = str_in[i];
+				regex_char_arr[j]->regex_char_type = SIMPLE_CHAR;
+				break;
+			}
+		}
+	}
+	regex_char_arr[j] = NULL;
+	return regex_char_arr;
+}
+
+void test_regex_parser()
+{
+	int i = 0;
+	size_t str_len = 0;
+	char* str_test[100];
+	int ret_val = true;
+	regex_char **regex_char_arr = NULL;
+	scanf("%s", &str_test);
+	str_len = strlen(str_test) + 1;
+	regex_char_arr = regexParser(str_test);
+	if (regex_char_arr == NULL) goto free_mem;
+	print_regex(regex_char_arr);
+
+free_mem:
+	freeRegex(regex_char_arr);
+}
+
 void initializeCommand(command *input_command) {
 	input_command->search_str = NULL;
 	input_command->file_path = NULL;
