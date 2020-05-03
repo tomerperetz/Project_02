@@ -99,12 +99,12 @@ void printOutput(node *head, const command *usr_cmd)
 bool compareRegexChars(const char haystack, regex_char *needle, int *stack_step_size)
 {
 	bool condition = false;
-	bool a_string = false;
-	bool b_string = false;
+	//bool a_string = false;
+	//bool b_string = false;
 	char min = 0;
 	char max = 0;
-	regex_char** sub_needle_1 = NULL;
-	regex_char** sub_needle_2 = NULL;
+	//regex_char** sub_needle_1 = NULL;
+	//regex_char** sub_needle_2 = NULL;
 
 	switch (needle->regex_char_type)
 	{
@@ -128,6 +128,7 @@ bool compareRegexChars(const char haystack, regex_char *needle, int *stack_step_
 	case ROUND_BRACKET:
 	{	
 		printf("we are not doing this yet\n");
+		*stack_step_size = 0;  //just to deel with unused parameter warning
 		/*sub_needle_1 = regexParser(needle->data.round_brackets.str1);
 		sub_needle_2 = regexParser(needle->data.round_brackets.str2);
 
@@ -154,7 +155,10 @@ int MyStrCmp(const char *haystack, regex_char **needle)
 	int stack_step_size = 1;
 	size_t haystack_size = strlen(haystack);
 
-	for (i = 0; i < haystack_size; i++)
+	if (haystack_size == 0)
+		return STRCMP_SUBSTRING;;
+
+	for (i = 0; i < (int)haystack_size; i++)
 	{
 		if (needle[i] == 0)
 			break;
@@ -165,7 +169,7 @@ int MyStrCmp(const char *haystack, regex_char **needle)
 		if (stack_step_size > 1) i = i + stack_step_size;
 	}
 
-	if (i == haystack_size-1)
+	if (i == (int)haystack_size)
 		return STRCMP_TRUE;
 	else
 		return STRCMP_SUBSTRING;
@@ -192,7 +196,7 @@ char *RecStrStr(const char *haystack, regex_char **needle)
 void searchNeedle(node *head, const command *usr_cmd)
 {
 	node *curr_node = head;
-	bool print_count_only = usr_cmd->enabled.print_count_only;
+	//bool print_count_only = usr_cmd->enabled.print_count_only;
 	bool match_case = usr_cmd->enabled.match_case;
 	bool wrap_around = usr_cmd->enabled.wrap_around;
 	bool invert_match = usr_cmd->enabled.invert_match;

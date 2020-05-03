@@ -19,6 +19,7 @@ int getRegexLen(regex_char **regex_char_arr)
 	while (regex_char_arr[i] != NULL) i++;
 	return i;
 }
+
 void print_regex(regex_char **regex_char_arr)
 {
 	int i;
@@ -62,7 +63,8 @@ void print_regex(regex_char **regex_char_arr)
 void copyCharByChar(char* src, char* dst, int start, int size)
 {
 	int i = 0;
-	for (i; i < size; i++)
+
+	for (i = 0; i < size; i++)
 	{
 		dst[i] = src[i + start];
 	}
@@ -84,7 +86,6 @@ int getRegStrSize(char *str, char delimiter, int start_idx, int max_size)
 
 int parseRoundBreckets(char* str_in, int curr_idx, int size, regex_char *regex_char)
 {
-	int i = 0;
 	int first_start_idx = curr_idx+1;
 	int first_size = 0;
 	int second_start_idx = 0;
@@ -112,7 +113,6 @@ int parseRoundBreckets(char* str_in, int curr_idx, int size, regex_char *regex_c
 
 int parseSquareBreckets(char* str_in, int curr_idx, int size, regex_char *regex_char)
 {
-	int open_bracket = curr_idx;
 	int start_idx = curr_idx + 1;
 	int delimiter = curr_idx + 2;
 	int end_idx = curr_idx + 3;
@@ -148,7 +148,7 @@ void upperToLowerCase(char *action_string) {
 	}
 }
 
-void checkGrepOption(char *argument, command* input_command, int *A_flag) {
+void checkGrepOption(char *argument, command* input_command, bool *A_flag) {
 	switch (argument[1]) {
 	case 'A':
 		input_command->enabled.print_extra_lines = true;
@@ -258,7 +258,7 @@ regex_char** regexParser(char* str_in)
 	}
 
 	// parse str in
-	for (i = 0, j=0; i < size; i++, j++)
+	for (i = 0, j=0; i < (int)size; i++, j++)
 	{
 		switch (str_in[i])
 		{
@@ -307,6 +307,7 @@ regex_char** regexParser(char* str_in)
 	return regex_char_arr;
 }
 
+/*
 void test_regex_parser()
 {
 	int i = 0;
@@ -323,6 +324,7 @@ void test_regex_parser()
 free_mem:
 	freeRegex(regex_char_arr);
 }
+*/
 
 void initializeCommand(command *input_command) {
 	input_command->search_str = NULL;
@@ -362,39 +364,49 @@ void printCommand(command input_command) {
 	printf("Input through stdin:					%d\n", input_command.std_in);
 }
 
+int stringsParser(command *usr_cmd, char **arguments_list, int idx, bool *search_str_flag, bool *file_path_flag) {
+
+	if (!(*search_str_flag)) {
+		usr_cmd->search_str = insertStrToCommand(usr_cmd->search_str, arguments_list[idx], usr_cmd->enabled.extended_regexp);
+		if (usr_cmd->search_str == NULL) {
+			return ERR;
+		}
+		*search_str_flag = true;
+		return true;
+	}
+	else {
+		usr_cmd->file_path = insertStrToCommand(usr_cmd->file_path, arguments_list[idx], usr_cmd->enabled.extended_regexp);
+		if (usr_cmd->file_path == NULL) {
+			return ERR;
+		}
+		*file_path_flag = true;
+		return true;
+	}
+
+}
+
 int commandParser(char **arguments_list, int arguments_amount, command *usr_cmd) {
-	int idx = 2, A_flag = false, search_str_flag = false, file_path_flag = false;
+	int idx = 2;
+	bool number_after_A_flag = false;
+	bool search_str_flag = false;
+	bool file_path_flag = false;
 
 
 	for (idx = 1; idx < arguments_amount; idx++) {
-		if (A_flag == true) {
+		if (number_after_A_flag) {
 			usr_cmd->enabled.num_of_extra_lines = atoi(arguments_list[idx]);
-			A_flag = false;
+			number_after_A_flag = false;
 			continue;
 		}
 		if (arguments_list[idx][0] == '-') {
-			checkGrepOption(arguments_list[idx], usr_cmd, &A_flag);
+			checkGrepOption(arguments_list[idx], usr_cmd, &number_after_A_flag);
 		}
 		else {
-			if (search_str_flag == false) {
-				usr_cmd->search_str = insertStrToCommand(usr_cmd->search_str, arguments_list[idx], usr_cmd->enabled.extended_regexp);
-				if (usr_cmd->search_str == NULL) {
-					return false;
-				}
-				search_str_flag = true;
-				continue;
-			}
-			else {
-				usr_cmd->file_path = insertStrToCommand(usr_cmd->file_path, arguments_list[idx], usr_cmd->enabled.extended_regexp);
-				if (usr_cmd->file_path == NULL) {
-					return false;
-				}
-				file_path_flag = true;
-				break;
-			}
+			if (stringsParser(usr_cmd, arguments_list, idx, &search_str_flag, &file_path_flag) == ERR)
+				return false;
 		}
 	}
-	if (file_path_flag == false) {          // check if there is a better way to do it. 
+	if (file_path_flag == false) {  
 		usr_cmd->std_in = true;
 	}
 	return true;
